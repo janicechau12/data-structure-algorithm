@@ -18,32 +18,26 @@ class Solution(object):
         :type root: Node
         :rtype: Node
         """
+        if root is None:
+            return root
         
-        current, next = root, root.left if root else None
+        queue = []
+        queue.append(root)
         
-        while current and next:
-            # connect then ancenstor children
-            if current.left and current.right:
-                current.left.next = current.right
+        while(len(queue) > 0):
+            size = len(queue)
             
-            # if current.next is not null, connect both children and move pointer to right
-            if current.next:
-                if current.right:
-                    current.right.next = current.next.left if current.next.left else current.next.right
-                elif current.left:
-                    current.left.next = current.next.left  if current.next.left else current.next.right
-                
-                current = current.next
-            else:
-                # move both pointer
-                current = next
-                # tricky part - it is possible that current doesn't have child
-                if current.left and current.right is None:
-                    if current.next is not None:
-                        next = current.next.left if current.next.left else current.next.right
-                    else:
-                        next = None
-                else:
-                    next = current.left if current.left else current.right
-                
+            for i in range(size):
+                # BFS
+                node = queue.pop(0)
+                if (i < size -1) : 
+                    node.next = queue[0]
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            
         return root
+
+# explanation - https://www.youtube.com/watch?v=gc0pFTn90zg
+# solution - https://zhenyu0519.github.io/2020/03/13/lc117/
