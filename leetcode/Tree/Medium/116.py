@@ -6,6 +6,7 @@
 
 # Initially, all next pointers are set to NULL.
 
+# Solution: https://www.youtube.com/watch?v=U4hFQCa1Cq0    
 
 """
 # Definition for a Node.
@@ -23,30 +24,27 @@ class Solution(object):
         :type root: Node
         :rtype: Node
         """
-        # Thought: breadth first traverse + queue (fifo) to traverse from left to right
+        # setup current and next pointer
+        current, next = root, root.left if root else None
         
-        # base case
-        if root is None:
-            return
-        
-        # create queue and enqueue the root 
-        queue = []
-        queue.append(root)
-        
-        while(len(queue) > 0):
-            # pop first node in queue
-            current = queue.pop(0)
+        # as long as the current and next pointer is not null, we will continue BFS
+        while current and next:
+            # connect children of current node
+            current.left.next = current.right
             
-            # if mod of 2 is not 0, means the next value in queue is in same level
-            if len(queue) % 2 != 0:
-                current.next = queue[0]
+            if current.next is not None:
+                # connect the children from different ancestor
+                current.right.next = current.next.left
+                # move current pointer to right
+                current = current.next
+            else:
+            # move pointer if current.next is NULL (means reach to the right)
+                current = next
+                next = current.left
                 
-            # add two children into queue
-            if current.left is not None:
-                queue.append(current.left)
-            
-            if current.right is not None:
-                queue.append(current.right)
+        return root
+    
+    
     
     
     
