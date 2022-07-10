@@ -14,34 +14,21 @@ class Solution(object):
         :type root: TreeNode
         :rtype: None Do not return anything, modify root in-place instead.
         """
-        # DFS
-        # need one pointer at root
-        if root is None:
-            return
         
-        top = root
-        self.leftTraversal(root.left, top)
-        self.rightTraversal(root.right, top)
+        temp = []
+        def dfs(node):
+            if node is None:
+                return
+            
+            dfs(node.left)
+            temp.append(node)
+            dfs(node.right)
         
+        dfs(root)
         
-    def leftTraversal(self, root, top):
-        if root is None:
-            return
+        sortedNum = sorted(n.val for n in temp)
         
-        self.leftTraversal(root.left, top)
-        if root.val > top.val:
-            temp = top.val
-            top.val = root.val
-            root.val = temp
-        self.leftTraversal(root.right, top)
-    
-    def rightTraversal(self, root, top):
-        if root is None:
-            return
-        
-        self.rightTraversal(root.left, top)
-        if root.val < top.val:
-            temp = top.val
-            top.val = root.val
-            root.val = temp
-        self.rightTraversal(root.right, top)
+        for i in range(len(sortedNum)):
+            temp[i].val = sortedNum[i]
+
+# Solution - https://www.youtube.com/watch?v=bJBwOMPhe6Y
