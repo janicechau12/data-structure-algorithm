@@ -6,31 +6,31 @@
 # If no such second minimum value exists, output -1 instead.
 
 # Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
+import sys
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
 class Solution:
     def findSecondMinimumValue(self, root: Optional[TreeNode]) -> int:
+        if not root: return -1
         
-        if root is None:
-            return -1
-    
-        min, secondMin = root.val, -1
+        #sys.maxsize or float("inf") to define MAX_INT
         
-        def dfs(root):
-            if root is None: return
+        self.min = root.val
+        self.res = sys.maxsize
+        self.inOrder(root)
+       
+        return self.res if self.res != sys.maxsize else -1
+        
+    def inOrder(self, root):
+            if not root: return
             
-            if root.left is not None and root.right is not None:
-                secondMin = max(root.left.val, root.right.val)
-            
-            if secondMin == min:
-                dfs(root.left)
-                dfs(root.right)
-        
-        dfs(root)
-        if secondMin == min:
-            return -1
-        return secondMin
+            self.inOrder(root.left)
+            if self.min < root.val < self.res:
+                self.res = root.val
+            self.inOrder(root.right)
         
